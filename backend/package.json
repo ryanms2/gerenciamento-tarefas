@@ -5,7 +5,8 @@
   "main": "app.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/app.ts"
+    "dev": "nodemon src/app.ts",
+    "start": "ts-node src/app.ts"
   },
   "author": "Rian Santos",
   "license": "ISC",
@@ -25,7 +26,7 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.6",
-    "@types/node": "^22.5.0",
+    "@types/node": "^22.5.5",
     "nodemon": "^3.1.4"
   }
 }
