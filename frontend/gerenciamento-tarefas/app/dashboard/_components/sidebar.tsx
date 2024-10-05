@@ -5,15 +5,17 @@ import { Button } from "@/components/ui/button"
 import { AuthContext } from "@/context/authContext";
 import { BarChart3, ChevronDown, ChevronUp, ListTodo, LogOut, Settings } from "lucide-react"
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react"
 import { DarkMode } from "./_components/darkMode";
+import { destroyCookie } from "nookies"
 
 export function Sidebar({ className }: { className?: string }) {
     const [selectedMenuItem, setSelectedMenuItem] = useState("")
     const [isUserMenuExpanded, setIsUserMenuExpanded] = useState(false)
 
     const { user } = useContext(AuthContext)
+    const router = useRouter()
 
     const pathname = usePathname()
     useEffect(() => {
@@ -25,6 +27,14 @@ export function Sidebar({ className }: { className?: string }) {
             setSelectedMenuItem("Dashboard")
         }
     }, [pathname])
+
+    const handleLogout = () => {
+      destroyCookie(undefined, 'gerentarefas.token');
+        setTimeout(() => {
+          router.push('/auth')
+        }, 1000)
+      
+    }
     return (
             <div className={`flex flex-col h-full shadow-md ${className}`}>
               <div className="flex-grow p-4">
@@ -71,7 +81,7 @@ export function Sidebar({ className }: { className?: string }) {
                   onClick={() => setIsUserMenuExpanded(!isUserMenuExpanded)}
                 >
                   <Avatar className="w-6 h-6 mr-2">
-                    <AvatarImage src="/placeholder-avatar.jpg" alt="User avatar" />
+                    <AvatarImage src={user?.imagem} alt="User avatar" />
                     <AvatarFallback>JD</AvatarFallback>
                   </Avatar>
                   <span className="flex-grow text-left">{user?.nome}</span>
@@ -83,7 +93,7 @@ export function Sidebar({ className }: { className?: string }) {
                     <div className="flex items-center justify-end">
                       <DarkMode />
                     </div>
-                    <Button variant="outline" className="w-full justify-start" onClick={() => console.log("Logout clicked")}>
+                    <Button variant="outline" className="w-full justify-start" onClick={handleLogout}>
                       <LogOut className="mr-2 h-4 w-4" />
                       Logout
                     </Button>

@@ -5,7 +5,7 @@ export function getAPIClient(ctx?: any) {
     const { 'gerentarefas.token': token } = parseCookies(ctx);
     
     const api = axios.create({
-        baseURL: 'http://localhost:3004/api'
+        baseURL: process.env.NEXT_PUBLIC_API_URL
     })
 
     if(token) {

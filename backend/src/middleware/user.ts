@@ -18,7 +18,7 @@ export const userMiddleware = {
     },
 
     checkRegisterUser: async (req: Request, res: Response, next: NextFunction) => {
-        const { name, password, email } = req.body;
+        const { name, password, email, image } = req.body;
 
         if (!password) {
             return res.status(400).json({ message: 'password is required' });
@@ -30,6 +30,10 @@ export const userMiddleware = {
 
         if (!name) {
             return res.status(400).json({ message: 'name is required' });
+        }
+
+        if (!image) {
+            return res.status(400).json({ message: 'image is required' });
         }
 
         next();

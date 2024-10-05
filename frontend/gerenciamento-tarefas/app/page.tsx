@@ -1,5 +1,5 @@
+import { HomePage } from "./_components/home_page";
 
 export default function Home() {
-
-  return <h1>eita</h1>
+  return <HomePage />
 }

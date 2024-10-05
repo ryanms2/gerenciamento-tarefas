@@ -28,6 +28,7 @@ export type User = {
     id: number;
     nome: string;
     email: string;
+    imagem: string;
 }
 
 export type AuthContextType = {
@@ -40,7 +41,7 @@ export type AuthContextType = {
 export type AuthTokenType = {
   data: {
     message: string;
-    credentials: { id: number, nome: string, email: string };
+    credentials: { id: number, nome: string, email: string, imagem: string };
   }
   
 }
@@ -71,6 +72,7 @@ export type RecentActivitiesProps = {
     id: number;
     action: string;
     task: string;
-    user: string;
+    user_image: string;
+    user_name: string;
     timestamp: string;
 }

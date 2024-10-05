@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { connect } from "../model/database";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { decode } from "punycode";
 
 export const usersController = {
     getUser: async (req: Request, res: Response) => {
@@ -11,7 +10,7 @@ export const usersController = {
 
         const { email, password } = req.body;
 
-        const query = 'SELECT id, nome, email FROM usuarios WHERE email = ?';
+        const query = 'SELECT id, nome, email, imagem FROM usuarios WHERE email = ?';
         const queryCheckPassword = 'SELECT senha FROM usuarios WHERE email = ?';
         try {
             const resultCheckPassword = await connection?.query(queryCheckPassword, [email]);
@@ -25,7 +24,7 @@ export const usersController = {
             const result = await connection?.query(query, [email]);
             const user = Object(result?.[0])
 
-            const token = jwt.sign({ id: user[0].id, nome: user[0].nome, email: user[0].email }, process.env.JWT_SECRET ?? '', { expiresIn: '1h' });
+            const token = jwt.sign({ id: user[0].id, nome: user[0].nome, email: user[0].email, imagem: user[0].imagem }, process.env.JWT_SECRET ?? '', { expiresIn: '1h' });
 
             return res.status(200).json({ 
                 message: 'login success', 
@@ -65,7 +64,7 @@ export const usersController = {
         // se o retorno de connect() for null, então o objeto vazio é retornado
         const { connection, closeConnection } = await connect() ?? {};
 
-        const { name, email, password } = req.body;
+        const { name, email, password, image } = req.body;
         const token = req.headers.authorization?.split(' ')[1] ?? '';
         const decoded = jwt.verify(token, process.env.JWT_SECRET ?? '') as { id: number };
 
@@ -86,12 +85,17 @@ export const usersController = {
                 await connection?.query(updatePasswordQuery, [passwordBcrypted, decoded.id]);
             }
 
-            const query = 'SELECT id, nome, email FROM usuarios WHERE email = ?';
+            if (image) {
+                const updateImagemQuery = 'UPDATE usuarios SET imagem = ? WHERE id = ?';
+                await connection?.query(updateImagemQuery, [image, decoded.id]);
+            }
+
+            const query = 'SELECT id, nome, email, imagem FROM usuarios WHERE email = ?';
 
             const result = await connection?.query(query, [email]);
             const user = Object(result?.[0])
 
-            const token = jwt.sign({ id: user[0].id, nome: user[0].nome, email: user[0].email }, process.env.JWT_SECRET ?? '', { expiresIn: '1h' });
+            const token = jwt.sign({ id: user[0].id, nome: user[0].nome, email: user[0].email, imagem: user[0].imagem }, process.env.JWT_SECRET ?? '', { expiresIn: '1h' });
 
             return res.status(200).json({ message: 'User updated', token });
 
@@ -139,7 +143,7 @@ export const usersController = {
         const token = req.headers.authorization?.split(' ')[1] ?? '';
 
         try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET ?? '') as { id: number, nome: string, email: string };
+            const decoded = jwt.verify(token, process.env.JWT_SECRET ?? '') as { id: number, nome: string, email: string, imagem: string };
             return res.status(200).json({ message: 'Token is valid', credentials: decoded });
 
         } catch (error) {

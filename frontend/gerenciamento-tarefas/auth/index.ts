@@ -15,6 +15,7 @@ data: {
       "id": number;
       "nome": string;
       "email": string;
+      "imagem": string;
     }
   ],
   "token": string;
@@ -29,8 +30,8 @@ export async function login({ email, password }: SignInData) {
 
       if (response.data.token) {
         const { token, credentials, message } = response.data;
-        const { id, nome, email } = credentials[0];
-        const user = { id, nome, email };
+        const { id, nome, email, imagem } = credentials[0];
+        const user = { id, nome, email, imagem };
         return { message, token, user };
       }
   } catch (error: any) {

@@ -32,6 +32,7 @@ export function AuthProvider({ children }: any) {
           id: validateToken.data.credentials.id,
           nome: validateToken.data.credentials.nome,
           email: validateToken.data.credentials.email,
+          imagem: validateToken.data.credentials.imagem,
         });
         } catch (error: any) {
           return error.response;
@@ -42,12 +43,14 @@ export function AuthProvider({ children }: any) {
     }
   }, [])
 
-  async function updateUser({ id, nome, email }: User) {
+  async function updateUser({ id, nome, email, imagem }: User) {
+    
     
     setUser({
       id,
       nome,
-      email
+      email,
+      imagem
     });
   }
 

@@ -3,7 +3,7 @@ import { Sidebar } from "./_components/sidebar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-      <div className="flex h-screen">
+      <div className="flex h-screen overflow-hidden">
        {/* Sidebar for desktop */}
        <Sidebar className="hidden md:flex w-64" />
         {/* Hamburger menu for mobile */}

@@ -1,12 +1,14 @@
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { AuthContext } from "@/context/authContext";
 import { getTasks } from "@/services/data";
 import { RecentActivitiesProps, TaskUpdateChartsProps } from "@/types";
 import { parseCookies } from "nookies";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
   
 export function RecentActivities() {
+  const { user } = useContext(AuthContext)
   const [tasks, setTasks] = useState<any>([])
   const [recentActivities, setRecentActivities] = useState<any>([])
     useEffect(() => {
@@ -40,7 +42,9 @@ export function RecentActivities() {
     const monthsAgo = Math.floor(daysAgo / 30);
 
     let timeAgo;
-    if (monthsAgo > 0) {
+    if (timeDiff < 0) {
+        timeAgo = 'just now';
+    } else if (monthsAgo > 0) {
         timeAgo = `${monthsAgo} ${monthsAgo === 1 ? 'month' : 'months'} ago`;
     } else if (daysAgo > 0) {
         timeAgo = `${daysAgo} ${daysAgo === 1 ? 'day' : 'days'} ago`;
@@ -56,17 +60,17 @@ export function RecentActivities() {
     } else {
         action = 'New Task Created';
     }
-
     return {
         id: task.id,
         action: action,
         task: task.titulo,
-        user: 'User', // adicionar a imagem do usuario
+        user_image: user?.imagem,
+        user_name: user?.nome,
         timestamp: timeAgo
     };
     })
     setRecentActivities(convertedTasks);
-    }, [tasks])
+    }, [tasks, user])
 
     return (
         <Card>
@@ -79,12 +83,13 @@ export function RecentActivities() {
               {recentActivities.map((activity: RecentActivitiesProps) => (
                 <li key={activity.id} className="flex items-start space-x-4">
                   <Avatar>
-                    <AvatarFallback>{activity.user[0]}</AvatarFallback>
+                    <AvatarImage src={activity.user_image} alt="User avatar" />
+                    <AvatarFallback>{activity.user_name}</AvatarFallback>
                   </Avatar>
                   <div className="space-y-1">
                     <p className="text-sm font-medium">{activity.action}</p>
                     <p className="text-sm text-gray-500">
-                      {activity.task} by {activity.user}
+                      {activity.task} by {activity.user_name}
                     </p>
                     <p className="text-xs text-gray-400">{activity.timestamp}</p>
                   </div>

@@ -12,7 +12,6 @@ import { parseCookies, destroyCookie, setCookie } from "nookies";
 import { deleteAccountUser, updateAccountUser } from "@/services/data";
 import { AuthContext } from "@/context/authContext";
 import { toast } from "@/components/ui/use-toast";
-import { DarkMode } from "../../_components/_components/darkMode";
 import { useTheme } from "next-themes";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
@@ -23,6 +22,7 @@ export function ConfigurationsPage() {
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState<string | undefined>()
   const [name, setName] = useState<string | undefined>()
+  const [image, setImage] = useState<string | undefined>()
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [deletePassword, setDeletePassword] = useState("")
   const [deleteError, setDeleteError] = useState("")
@@ -43,6 +43,7 @@ export function ConfigurationsPage() {
   useEffect(() => {
     setName(user?.nome)
     setEmail(user?.email)
+    setImage(user?.imagem)
   }, [user])
 
   const handleChangeThemes = () => {
@@ -70,7 +71,7 @@ export function ConfigurationsPage() {
 
   const updateAccount = async() => {
     const { 'gerentarefas.token': token } = parseCookies();
-    const response = await updateAccountUser(token, name || '', email || '', password);
+    const response = await updateAccountUser(token, name || '', email || '', password, image || '');
     if(response.message === 'User updated') {
       destroyCookie(undefined, 'gerentarefas.token');
       setCookie(undefined, 'gerentarefas.token', response.token, {
@@ -80,7 +81,8 @@ export function ConfigurationsPage() {
       updateUser({
         id: user?.id || 0,
         nome: name || '',
-        email: email || ''
+        email: email || '',
+        imagem: image || ''
       });
 
       toast({
@@ -93,6 +95,7 @@ export function ConfigurationsPage() {
 
     setName(user?.nome)
     setEmail(user?.email)
+    setImage(user?.imagem)
   }
 
   return (
@@ -114,6 +117,10 @@ export function ConfigurationsPage() {
                 <CardDescription>Manage your account details</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
+                <div className="space-y-1">
+                  <Label htmlFor="image">Avatar</Label>
+                  <Input id="image" value={image} onChange={e => setImage(e.target.value)} />
+                </div>
                 <div className="space-y-1">
                   <Label htmlFor="name">Name</Label>
                   <Input id="name" value={name} onChange={e => setName(e.target.value)} />

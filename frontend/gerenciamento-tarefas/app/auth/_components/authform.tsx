@@ -10,6 +10,7 @@ import { parseCookies } from 'nookies';
 import { useContext, useEffect } from "react";
 import { AuthContext } from "@/context/authContext";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 
 export function LoginPage() {
@@ -79,7 +80,7 @@ export function LoginPage() {
             Don&apos;t have an account?
           </div>
           <Button variant="link" className="p-0 text-sm">
-            Sign up
+            <Link href={"/auth/signup"}>Sign up</Link>
           </Button>
         </CardFooter>
       </Card>
