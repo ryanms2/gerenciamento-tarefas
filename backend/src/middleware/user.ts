@@ -32,10 +32,6 @@ export const userMiddleware = {
             return res.status(400).json({ message: 'name is required' });
         }
 
-        if (!image) {
-            return res.status(400).json({ message: 'image is required' });
-        }
-
         next();
     },
 
