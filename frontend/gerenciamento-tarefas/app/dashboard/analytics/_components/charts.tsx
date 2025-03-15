@@ -33,8 +33,8 @@ export function Charts() {
   }, [])
 
   useEffect(() => {
-    const completed = tasks.filter((task: TaskUpdateChartsProps) => task.status === 'concluída');
-    const inProgress = tasks.filter((task: TaskUpdateChartsProps) => task.status === 'em andamento');
+    const completed = tasks.filter((task: TaskUpdateChartsProps) => task.status === 'concluido');
+    const inProgress = tasks.filter((task: TaskUpdateChartsProps) => task.status === 'em_andamento');
     const toDo = tasks.filter((task: TaskUpdateChartsProps) => task.status === 'pendente');
 
     setTaskStatusData([

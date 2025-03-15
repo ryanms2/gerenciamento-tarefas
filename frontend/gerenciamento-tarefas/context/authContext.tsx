@@ -71,9 +71,9 @@ export function AuthProvider({ children }: any) {
       return true
     }
 
-    return response?.message;
+    return response;
     } catch (error: any) {
-      return error.response.data.message; 
+      return error?.response?.data; 
       
     }
     

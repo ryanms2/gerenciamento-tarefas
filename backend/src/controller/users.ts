@@ -13,6 +13,12 @@ export const usersController = {
         const query = 'SELECT id, nome, email, imagem FROM usuarios WHERE email = ?';
         const queryCheckPassword = 'SELECT senha FROM usuarios WHERE email = ?';
         try {
+            const [result]: any = await connection?.query(query, [email]);
+            if (!result?.length || !result[0]) {
+                return res.status(404).json({ message: 'User not found' });
+                
+            }
+            const user = result[0];
             const resultCheckPassword = await connection?.query(queryCheckPassword, [email]);
             const userPassword = Object(resultCheckPassword?.[0]) 
             
@@ -21,11 +27,8 @@ export const usersController = {
             if (!passwordDecypted) {
                 return res.status(401).json({ message: 'Email or password is invalid' });
             }
-            const result = await connection?.query(query, [email]);
-            const user = Object(result?.[0])
-
-            const token = jwt.sign({ id: user[0].id, nome: user[0].nome, email: user[0].email, imagem: user[0].imagem }, process.env.JWT_SECRET ?? '', { expiresIn: '1h' });
-
+            
+            const token = jwt.sign({ id: user.id, nome: user.nome, email: user.email, imagem: user.imagem }, process.env.JWT_SECRET ?? '', { expiresIn: '1h' });
             return res.status(200).json({ 
                 message: 'login success', 
                 credentials: user,

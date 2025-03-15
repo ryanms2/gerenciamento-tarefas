@@ -132,7 +132,7 @@ export function ManagerDashboard() {
     const updateTask = async () => {
       const status = newStatus
       const { id } = task
-      const completedDate = status === "concluida" ? new Date() : null
+      const completedDate = status === "concluido" ? new Date() : null
       const data = await updateStatusTasks( { id, status, concluido_em: completedDate  }, token )
 
       if(data.message === "Task status updated") {
@@ -258,22 +258,22 @@ export function ManagerDashboard() {
                               variant="outline" 
                               size="sm"
                               className={`px-2 py-1 text-xs ${
-                                task.status === "concluída" ? "bg-green-100 text-green-800" :
-                                task.status === "em andamento" ? "bg-yellow-100 text-yellow-800" :
+                                task.status === "concluido" ? "bg-green-100 text-green-800" :
+                                task.status === "em_andamento" ? "bg-yellow-100 text-yellow-800" :
                                 "bg-gray-100 text-gray-800"
                               }`}
                             >
-                              { task.status === "concluída" ? "Completed" : task.status === "em andamento" ? "In Progress" : "To Do"}
+                              { task.status === "concluido" ? "Completed" : task.status === "em_andamento" ? "In Progress" : "To Do"}
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent>
                             <DropdownMenuItem onClick={() => updateTaskStatus(task, "pendente")}>
                               To Do
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => updateTaskStatus(task, "em andamento")}>
+                            <DropdownMenuItem onClick={() => updateTaskStatus(task, "em_andamento")}>
                               In Progress
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => updateTaskStatus(task, "concluida")}>
+                            <DropdownMenuItem onClick={() => updateTaskStatus(task, "concluido")}>
                               Completed
                             </DropdownMenuItem>
                           </DropdownMenuContent>

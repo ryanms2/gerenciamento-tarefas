@@ -53,9 +53,9 @@ export function RecentActivities() {
     }
 
     let action;
-    if (task.status === 'concluída') {
+    if (task.status === 'concluido') {
         action = 'Task Completed';
-    } else if (task.status === 'em andamento') {
+    } else if (task.status === 'em_andamento') {
         action = 'Task In Progress';
     } else {
         action = 'New Task Created';

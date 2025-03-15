@@ -10,14 +10,12 @@ type SignInData = {
 type Response = {
 data: {
   "message": string;
-  "credentials": [
-    {
+  "credentials":{
       "id": number;
       "nome": string;
       "email": string;
       "imagem": string;
-    }
-  ],
+  },
   "token": string;
 }
   
@@ -27,10 +25,9 @@ export async function login({ email, password }: SignInData) {
 
   try {
     const response: Response = await api.post("/user", { email, password });
-
       if (response.data.token) {
         const { token, credentials, message } = response.data;
-        const { id, nome, email, imagem } = credentials[0];
+        const { id, nome, email, imagem } = credentials;
         const user = { id, nome, email, imagem };
         return { message, token, user };
       }

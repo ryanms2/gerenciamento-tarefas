@@ -20,9 +20,8 @@ export function LoginPage() {
 
   async function handleSignIn(data: any) {
     
-      const response = await signIn(data);
-      console.log(response);
-      if (response === "Email or password is invalid" || response === undefined) {
+      const response: any = await signIn(data);
+      if (response?.message || response === undefined) {
         
         toast({
           title: "Email or password incorrect",

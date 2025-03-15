@@ -33,7 +33,7 @@ const [averageCompletionTime, setAverageCompletionTime] = useState(0)
     }, [])
 
     useEffect(() => {
-    const completed = tasks.filter((task: TaskUpdateChartsProps) => task.status === 'concluída');
+    const completed = tasks.filter((task: TaskUpdateChartsProps) => task.status === 'concluido');
     setCompletedTasks(completed);
 
     const averageTime = completed.length > 0 ? completed.reduce((acc: number, task: TaskUpdateChartsProps) => {
