@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/app.ts",
     "start": "ts-node dist/app.js",
-    "build": "tsc && cp .env dist/",
+    "build": "tsc",
     "build:prod": "npm run build && npm prune --production"
   },
   "author": "Rian Santos",
