@@ -27,7 +27,7 @@ taskRouter.put('/tasks/status',
     tasksController.updateStatusTask
 );
 
-taskRouter.delete('/tasks:id',
+taskRouter.delete('/tasks/:id',
     userMiddleware.checkToken,
     taskMiddleware.checkDeleteTask,
     tasksController.deleteTask

@@ -1,24 +1,27 @@
-import mysql from 'mysql2/promise';
+import { Pool } from 'pg';
 
 export async function connect() {
+    const pool = new Pool({
+        host: process.env.HOST_DATABASE,
+        user: process.env.USER_DATABASE,
+        database: process.env.NAME_DATABASE,
+        port: parseInt(process.env.PORT_DATABASE || '5432'),
+        password: process.env.PASSWORD_DATABASE,
+        ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+    });
+
     try {
-        const connection = await mysql.createConnection({
-            host: process.env.HOST_DATABASE || 'localhost',
-            user: process.env.USER_DATABASE || 'root',
-            database: process.env.NAME_DATABASE || 'test',
-            port: parseInt(process.env.PORT_DATABASE || '3306'),
-            password: process.env.PASSWORD_DATABASE || '',
-        });
-        console.log('Database connected');
-        
+        const connection = await pool.connect();
+        console.log('PostgreSQL connected');
         
         const closeConnection = async () => {
-            await connection.end();
-            console.log('Database connection closed');
+            await connection.release();
+            console.log('PostgreSQL connection closed');
         };
 
-        return { connection, closeConnection };
+        return { connection, closeConnection, pool };
     } catch (err) {
-        console.log(err);
+        console.log('PostgreSQL connection error:', err);
+        throw err;
     }
 }
