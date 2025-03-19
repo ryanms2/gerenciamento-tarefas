@@ -57,6 +57,7 @@ export type TaskUpdateProps = {
     token: string;
     titulo: string;
     descricao: string;
+    status: string;
 }
 
 export type TaskUpdateChartsProps = {

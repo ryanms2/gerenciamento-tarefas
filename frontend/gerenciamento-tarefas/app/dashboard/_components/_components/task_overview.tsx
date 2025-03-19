@@ -25,7 +25,7 @@ export function TaskOverview({ tasks }: any) {
               <Circle className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{getTaskCountByStatus("em andamento")}</div>
+              <div className="text-2xl font-bold">{getTaskCountByStatus("em_andamento")}</div>
             </CardContent>
           </Card>
           <Card>
@@ -34,7 +34,7 @@ export function TaskOverview({ tasks }: any) {
               <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{getTaskCountByStatus("concluída")}</div>
+              <div className="text-2xl font-bold">{getTaskCountByStatus("concluido")}</div>
             </CardContent>
           </Card>
         </div>

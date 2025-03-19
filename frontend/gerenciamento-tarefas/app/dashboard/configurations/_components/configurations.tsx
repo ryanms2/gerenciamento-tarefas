@@ -15,10 +15,17 @@ import { toast } from "@/components/ui/use-toast";
 import { useTheme } from "next-themes";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Eye, EyeOff, CheckCircle2, XCircle } from "lucide-react";
+
+const passwordStrengthRegex = {
+  strong: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+  medium: /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,}$/
+}
 
 export function ConfigurationsPage() {
   const { user, updateUser } = useContext(AuthContext);
+  const [showPassword, setShowPassword] = useState(false)
+  const [passwordStrength, setPasswordStrength] = useState<'weak' | 'medium' | 'strong' | null>(null)
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState<string | undefined>()
   const [name, setName] = useState<string | undefined>()
@@ -50,6 +57,16 @@ export function ConfigurationsPage() {
     setTheme(themeSelect || 'dark')
   }
 
+  const checkPasswordStrength = (password: string) => {
+    if (passwordStrengthRegex.strong.test(password)) {
+      setPasswordStrength('strong')
+    } else if (passwordStrengthRegex.medium.test(password)) {
+      setPasswordStrength('medium')
+    } else {
+      setPasswordStrength('weak')
+    }
+  }
+
   const deleteAccount = async() => {
     if(!deletePassword) {
       setDeleteError("Please enter your password to delete your account")
@@ -70,6 +87,10 @@ export function ConfigurationsPage() {
   }
 
   const updateAccount = async() => {
+    if (passwordStrength === 'weak') {
+      alert('Please choose a stronger password')
+      return
+    }
     const { 'gerentarefas.token': token } = parseCookies();
     const response = await updateAccountUser(token, name || '', email || '', password, image || '');
     if(response.message === 'User updated') {
@@ -131,11 +152,45 @@ export function ConfigurationsPage() {
                 </div>
                 <div className="space-y-1">
                   <Label htmlFor="password">Password</Label>
-                  <Input id="password" type="password" placeholder="*******" value={password} onChange={e => setPassword(e.target.value)} />
+                  <div className="relative">
+                    <Input
+                      id="password"
+                      type={showPassword ? 'text' : 'password'}
+                      value={password}
+                      onChange={e => {
+                        setPassword(e.target.value)
+                        checkPasswordStrength(e.target.value)
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                    >
+                      {showPassword ? <EyeOff className="h-4 w-4 text-gray-500" /> : <Eye className="h-4 w-4 text-gray-500" />}
+                    </button>
+                  </div>
+                  {password && passwordStrength && (
+                    <Alert variant={passwordStrength === 'strong' ? 'default' : 'destructive'}>
+                      <AlertTitle className="flex items-center">
+                        {passwordStrength === 'strong' ? (
+                          <CheckCircle2 className="h-4 w-4 mr-2" />
+                        ) : (
+                          <XCircle className="h-4 w-4 mr-2" />
+                        )}
+                        Password Strength: {passwordStrength}
+                      </AlertTitle>
+                      <AlertDescription>
+                        {passwordStrength === 'weak' && 'Your password is too weak. It should be at least 8 characters long and include uppercase, lowercase, numbers, and special characters.'}
+                        {passwordStrength === 'medium' && 'Your password is okay, but could be stronger. Try adding special characters.'}
+                        {passwordStrength === 'strong' && 'Your password is strong!'}
+                      </AlertDescription>
+                    </Alert>
+                  )}
                 </div>
               </CardContent>
               <CardFooter className="justify-between">
-                <Button onClick={updateAccount}>Save Changes</Button>
+                <Button onClick={updateAccount} disabled={passwordStrength === 'weak'}>Save Changes</Button>
                 <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
                     <DialogTrigger asChild>
                       <Button variant="destructive">

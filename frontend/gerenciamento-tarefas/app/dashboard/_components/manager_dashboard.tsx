@@ -102,7 +102,6 @@ export function ManagerDashboard() {
 
   const deleteTask = (id: number) => {
    const { 'gerentarefas.token': token } = parseCookies();
-   
     const removeTask = async () => {
       const data = await deleteTasks(id, token)
       
@@ -169,7 +168,8 @@ export function ManagerDashboard() {
           id: editingTask?.id,
           token,
           titulo: editTitle,
-          descricao: editDescription
+          descricao: editDescription,
+          status: editingTask?.status
         }
         const data = await updateTaskData(task)
 

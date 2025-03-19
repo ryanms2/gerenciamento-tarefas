@@ -42,11 +42,11 @@ export async function updateStatusTasks({ id, concluido_em, status }: TaskUpdate
     }
 }
 
-export async function updateTaskData({ id, token, titulo, descricao }: TaskUpdateProps) {
+export async function updateTaskData({ id, token, titulo, descricao, status }: TaskUpdateProps) {
 
     api.defaults.headers['Authorization'] = `Bearer ${token}`
     try {
-        const response = await api.put("/tasks", { id, titulo, descricao });
+        const response = await api.put("/tasks", { id, titulo, descricao, status });
         return response.data;
     } catch (error: any) {
         console.log(error)
@@ -60,7 +60,7 @@ export async function deleteTasks(id: number, token: string) {
     api.defaults.headers['Authorization'] = `Bearer ${token}`
     
     try {
-        const response = await api.delete(`/tasks:${id}`);
+        const response = await api.delete(`/tasks/:${id}`);
         return response.data;
     } catch (error: any) {
         console.log(error)
@@ -99,7 +99,6 @@ export async function createAccountUser(name: string, email: string, password: s
     
     try {
         const response = await api.post(`/user/register`, { name, email, password });
-        console.log(response)
         return response.data;
     } catch (error: any) {
         console.log(error)
