@@ -2,11 +2,12 @@ import { Pool } from 'pg';
 
 export async function connect() {
     const pool = new Pool({
-        host: process.env.HOST_DATABASE,
-        user: process.env.USER_DATABASE,
-        database: process.env.NAME_DATABASE,
-        port: parseInt(process.env.PORT_DATABASE || '5432'),
-        password: process.env.PASSWORD_DATABASE,
+        connectionString: process.env.DATABASE_URL,
+        // host: process.env.HOST_DATABASE,
+        // user: process.env.USER_DATABASE,
+        // database: process.env.NAME_DATABASE,
+        // port: parseInt(process.env.PORT_DATABASE || '5432'),
+        // password: process.env.PASSWORD_DATABASE,
         ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
     });
 
